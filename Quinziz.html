@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0f7fa;
+            margin: 0;
+            padding: 0;
+            color: #00695c;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .logo {
+            font-family: cursive;
+            gap: 10px;
+            font-size: 36px;
+            font-weight: bold;
+            color: #000000;
+        }
+        .wrapper {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: center;
+            height: calc(100vh - 80px);
+            padding: 0 10%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .wrapper::before {
+            content: '';
+            position: relative;
+            height: 450px;
+            width: 450px;
+            border-radius: 50%;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(45deg, #0011ff, rgb(143, 199, 255));
+            z-index: -1;
+            animation: moveCircle 6s ease-in-out infinite alternate;
+        }
+        .wrapper::after {
+            content: '';
+            position: absolute;
+            height: 250px;
+            width: 250px;
+            border-radius: 50%;
+            right: 50%;
+            top: -100px;
+            background: linear-gradient(45deg, #0011ff, rgb(143, 199, 255));
+            z-index: -1;
+            animation: moveCircleVertical 8s ease-in-out infinite alternate;
+        }
+        .cols {
+            max-width: 400px;
+            margin-right: 10%;
+            z-index: 2;
+        }
+        .topline {
+            display: block;
+            font-size: 35px;
+            letter-spacing: 5px;
+            color: #000000;
+            margin-bottom: 10px;
+        }
+        .topline::after {
+            content: '';
+            display: block;
+            height: 4px;
+            margin-top: 10px;
+            margin-left: auto;
+        }
+        .multitext {
+            color: #ff04ff;
+            text-transform: capitalize;
+        }
+        .home-container {
+            text-align: center;
+            background: #ffffff;
+            padding: 40px 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .home-container h1 {
+            color: #1e88e5;
+            font-size: 40px;
+            font-weight: bold;
+            margin: 0;
+            text-shadow: 1px 1px #000;
+        }
+
+        .home-container h2 {
+            color: #e91e63;
+            font-size: 24px;
+            margin: 10px 0 20px 0;
+        }
+
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .about-button {
+            background-color: #81d4fa;
+            color: black;
+        }
+
+        .button:hover {
+            opacity: 0.8;
+        }
+        @keyframes moveCircle {
+            0% { transform: translateX(0) translateY(-50%); }
+            100% { transform: translateX(-100px) translateY(-50%); }
+        }
+        @keyframes moveCircleVertical {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(50px); }
+        }
+        .year {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            color: #ffb74d;
+            font-weight: bold;
+        }
+        .hidden {
+            display: none;
+        }
+        .container {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 100px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            max-height: 900px;
+            margin: auto;
+        }
+
+        h1, h2 {
+            text-align: center;
+            color: #004d40;
+        }
+
+        .question {
+            margin-bottom: 20px;
+            font-size: 1.2em;
+            color: #333;
+        }
+        .button.quiz-button {
+            display: block;
+            margin: 10px auto;
+            padding: 12px 20px;
+            background-color: #00796b;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .quiz-button:hover {
+            background-color: #004d40;
+        }
+        .result {
+            text-align: center;
+        }
+        .progress-bar {
+            background: #d32f2f;
+            height: 5px;
+            border-radius: 2px;
+            margin-top: 20px;
+        }
+        .progress-bar div {
+            background: #4caf50;
+            height: 100%;
+            width: 0;
+            border-radius: 2px;
+            transition: width 0.4s;
+        }
+
+        #timer {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #d32f2f;
+            text-align: center;
+        }
+        #status {
+            font-size: 1.2em;
+            text-align: center;
+        }
+        input[type="text"] {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #00796b;
+            border-radius: 4px;
+        }
+        input[type="text"]:focus {
+            border-color: #004d40;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Portfolio Landing Page -->
+<div class="home-container">
+    <h1>KELOMPOK<br>16</h1>
+    <h2>FADIRA x ATHIRAH</h2>
+    <div class="button-container">
+        <button class="button about-button">ABOUT APP</button>
+    </div>
+    <span class="year">2024</span>
+</div>
+
+<!-- Quiz Application -->
+<div class="container hidden" id="app">
+    <div id="home">
+        <nav>
+            <!--------------- Navigasi ------------>
+            <div class="logo">
+                <i class="fa-brands fa-quinscape"></i>Quinziz
+            </div>
+        </nav>
+        <div class="wrapper" id="home">
+            <div class="cols">
+                <span class="topline">Selamat Datang di Quinziz</span>
+                <h1>Let's <span class="multitext">Fun</span></h1>
+                <button class="button quiz-button" onclick="showPage('playerForm')">Mulai Quiz</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="playerForm" class="hidden">
+        <h2>Masukkan Data Pemain</h2>
+        <input type="text" id="playerName" placeholder="Nama" required />
+        <input type="text" id="playerNIM" placeholder="NIM" required />
+        <button class="button quiz-button" onclick="startQuiz()">Mulai Kuis</button>
+    </div>
+
+    <div id="quiz" class="hidden">
+        <h2 id="question-title"></h2>
+        <div id="question-content" class="question"></div>
+        <button class="button quiz-button" id="nextBtn" onclick="nextQuestion()">Berikutnya</button>
+        <div id="timer"></div>
+        <div id="status"></div>
+        <div class="progress-bar">
+            <div id="progress"></div>
+        </div>
+    </div>
+
+    <div id="result" class="hidden result">
+        <h2>Hasil Kuis</h2>
+        <p>Nama: <span id="resultName"></span></p>
+        <p>NIM: <span id="resultNIM"></span></p>
+        <p>Nilai Total: <span id="totalScore"></span></p>
+        <button class="button quiz-button" onclick="showPage('home')">Kembali ke Beranda</button>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.12"></script>
+<script>
+    var typingeffect = new Typed(".multitext", {
+        strings: ["Think", "Play", "Ready"],
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 80,
+        backDelay: 1500
+    });
+</script>
+<script>
+
+    const questions = [
+        {
+            type: 'multiple-choice',
+            question: 'Apa warna langit pada siang hari?',
+            options: ['Merah', 'Biru', 'Hijau', 'Kuning'],
+            answer: 'Biru',
+            points: 5
+        },
+        {
+            type: 'fill-in-the-blank',
+            question: 'Siapa presiden pertama Republik Indonesia?',
+            answer: 'Soekarno',
+            points: 5
+        },
+        {
+            type: 'multiple-choice',
+            question: 'Apa ibukota Indonesia?',
+            options: ['Jakarta', 'Bandung', 'Surabaya', 'Medan'],
+            answer: 'Jakarta',
+            points: 5
+        },
+        {
+            type: 'fill-in-the-blank',
+            question: 'Sebutkan satu jenis hewan mamalia!',
+            answer: 'Kucing',
+            points: 5
+        },
+        {
+            type: 'multiple-choice',
+            question: 'Apa satuan waktu?',
+            options: ['Detik', 'Menit', 'Jam', 'Hari'],
+            answer: 'Detik',
+            points: 5
+        }
+    ];
+
+    let currentQuestion = 0;
+    let totalScore = 0;
+    let timer;
+
+    function showPage(pageId) {
+        document.querySelectorAll('.container > div').forEach(div => {
+            div.classList.add('hidden');
+        });
+        document.getElementById(pageId).classList.remove('hidden');
+
+        if (pageId === 'quiz') {
+            loadQuestion();
+        }
+    }
+
+    function startQuiz() {
+        const name = document.getElementById('playerName').value;
+        const nim = document.getElementById('playerNIM').value;
+        if (name && nim) {
+            showPage('quiz');
+        }
+    }
+
+    function loadQuestion() {
+        const question = questions[currentQuestion];
+        document.getElementById('question-title').innerText = `Pertanyaan ${currentQuestion + 1}`;
+        const content = document.getElementById('question-content');
+        content.innerHTML = '';
+
+        if (question.type === 'multiple-choice') {
+            content.innerHTML += `<p>${question.question}</p>`;
+            question.options.forEach(option => {
+                content.innerHTML += `<label><input type="radio" name="answer" value="${option}"> ${option}</label><br>`;
+            });
+        } else if (question.type === 'fill-in-the-blank') {
+            content.innerHTML += `<p>${question.question}</p>`;
+            content.innerHTML += `<input type="text" id="fillAnswer" placeholder="Jawaban" />`;
+        }
+
+        document.getElementById('status').innerText = `Soal ${currentQuestion + 1} dari ${questions.length}`;
+        startTimer();
+    }
+
+    function startTimer() {
+        let timeLeft = 30;
+        document.getElementById('timer').innerText = `Waktu tersisa: ${timeLeft} detik`;
+        clearInterval(timer);
+
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = `Waktu tersisa: ${timeLeft} detik`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                nextQuestion();
+            }
+        }, 1000);
+    }
+
+    function nextQuestion() {
+        const question = questions[currentQuestion];
+        let answer = '';
+
+        if (question.type === 'multiple-choice') {
+            answer = document.querySelector('input[name="answer"]:checked')?.value;
+        } else if (question.type === 'fill-in-the-blank') {
+            answer = document.getElementById('fillAnswer').value.trim();
+        }
+
+        if (answer && answer === question.answer) {
+            totalScore += question.points;
+        }
+
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            loadQuestion();
+        } else {
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        clearInterval(timer);
+        document.getElementById('resultName').innerText = document.getElementById('playerName').value;
+        document.getElementById('resultNIM').innerText = document.getElementById('playerNIM').value;
+        document.getElementById('totalScore').innerText = totalScore;
+        showPage('result');
+    }
+
+    document.querySelector('.about-button').addEventListener('click', function() {
+        document.querySelector('.home-container').classList.add('hidden');
+        document.getElementById('app').classList.remove('hidden');
+        showPage('home');
+    });
+</script>
+</body>
+</html>
